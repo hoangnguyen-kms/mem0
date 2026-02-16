@@ -21,10 +21,20 @@ services:
       neo4j:
         condition: service_healthy
     command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload  # Enable auto-reload
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     environment:
       - PYTHONDONTWRITEBYTECODE=1  # Prevents Python from writing .pyc files
       - PYTHONUNBUFFERED=1  # Ensures Python output is sent straight to terminal
 
+  mem0-mcp:                                                                                                                                                                                                                                                                                                                                                                                                         
+    image: mem0-mcp-server                                                                                                                                                                                       
+    container_name: mem0-mcp                                                                                                                                                                                     
+    ports:                                                                                                                                                                                                       
+      - "8080:8081"                                                                                                                                                                                            
+    environment:                                         
+      - MEM0_API_KEY=xpense-manager.xyz
+      - MEM0_HOST=http://host.docker.internal:8888
   postgres:
       image: ankane/pgvector:v0.5.1
       restart: on-failure
